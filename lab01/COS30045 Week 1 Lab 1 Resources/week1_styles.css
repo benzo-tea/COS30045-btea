@@ -1,0 +1,37 @@
+h1  {
+  color: blue;
+  font-family: sans-serif;
+}
+
+body  {
+  font-family: "Monaco";
+}
+
+footer  {
+  background-color: lightgrey;
+  padding: 5px;
+  border-radius: 5px;
+  margin-top: 50px;
+}
+
+#buttons {
+	margin-top: 20px;
+}
+
+.image-button {
+	background-color: lightgreen;
+	border: none;
+	color: black;
+	padding: 10px 20px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	margin: 4px 2px;
+	cursor: pointer;
+	border-radius: 12px;
+}
+
+.image-button:hover {
+	background-color: #45a049;
+}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8"/>
+	<meta name="description"	content="Data Visualisation Week 1 Lab 3"/>
+	<meta name="keywords"		  content="HTML, CSS"/>
+	<meta name="author"			  content="Ben Tea"/>
+	<link rel="stylesheet" href="week1_styles.css">
+
+	<title>Drawing Shapes with SVG</title>
+	<!-- Create and style some SVGs -->
+</head>
+
+<body>
+
+	<h1>Drawing shapes with SVG</h1>
+    
+    <svg width="500" height="60" style="background-color: slategrey">
+
+        <g transform="translate(20, 0)">
+            <circle cx="25", cy="30", r="25" fill="cornflowerblue" />
+            <rect x="50", y="5", width="50", height="50" fill="rgb(100, 149, 237)" />
+            <ellipse cx="140" cy="30" rx="40" ry="25"
+            fill="rgba(100, 149, 237, 0.5)" />
+            <Line x1="0" y1="30" x2="180" y2="30" stroke="black"
+            stroke-width="5" />
+         </g>
+
+    </svg>
+    <br>
+    <br>
+	<footer style="color: grey;">
+		COS30045 Data Visualisation<br>
+		2025 Teaching Period 1
+	</footer>
+
+</body>
+</html>
