@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="description" content="Data Visualisation"/> 
+<meta name="keywords" content="HTML, CSS, D3"/> 
+<meta name="author" content="Benjamin Tea"/>
+<title>Task 2.1 D3 Data Binding</title>
+<script src="https://d3js.org/d3.v6.min.js"></script>
+</head>
+<body>
+    <h1>The D3 Journey starts here...</h1>
+
+    <script>
+
+    var dataset =[14,5,26,23,9];
+
+    d3.select("body").selectAll("p")                    // Within the body container and all <p> elements
+    .data(dataset)                              
+    .enter()
+    .append("p")                                        // Append a new <p>
+    // Creation of a function that binds text to <p>, dependant on dataset values
+    .text(function(d)   {
+            if (d < 10) {
+                return `Joe has watched ${d} cat videos today`;
+            }
+            else    {
+                return `Warning: Joe has watched ${d} cat videos today`;
+        }
+        })
+    // Colour the text depending on dataset values
+    .style("color", function(d) {
+        // If the value is less than 10, make the text black
+        if (d < 10) {
+            return "black";
+            }
+        // Otherwise, make the text red
+        else    {
+            return "red";
+        }
+    });
+    
+    </script>
+    
+    <br>
+    </br>
+    
+    <footer style="color:grey">
+        COS30045 Data Visualisation<br>
+        2025 Teaching Period 1
+    </footer>
+</body>
+</html>
+

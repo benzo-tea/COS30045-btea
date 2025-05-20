@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="description" content="Data Visualisation"/>
+<meta name="keywords" content="HTML, CSS, D3"/>
+<meta name="author" content="Ben Tea"/>
+<title>Task 5.3 D3 Adding and removing data</title>
+<script src="https://d3js.org/d3.v6.min.js"></script>
+</head> 
+<body>
+<h1 style="font-family: Cursive, Lucida Hand Writing;">Week 5 Lab 3 - Adding and removing data</h1>
+<button id="remove" style="background-color: white; color: black; border: 2px solid #f44336; border-radius: 5px;">Remove</button>
+<button id="add" style="background-color: white; color: black; border: 2px solid #04AA6D;border-radius: 5px;">Add</button><br><br>
+
+<script>
+    // Setup of svg canvas
+    var margin = { top: 20, right: 20, bottom: 20, left: 40 };
+    var w = 500 - margin.left - margin.right;
+    var h = 250 - margin.top - margin.bottom;
+    var dataset = [14, 5, 26, 23, 9, 6, 24, 21, 19, 4, 3, 18, 8, 30, 7];
+
+    var xScale = d3.scaleBand()
+                   .domain(d3.range(dataset.length))
+                   .rangeRound([0, w])
+                   .paddingInner(0.05);
+
+    var yScale = d3.scaleLinear()
+                   .domain([0, d3.max(dataset)])
+                   .rangeRound([h, 0]);
+
+    // Addition of x and y-axes
+    var xAxis = d3.axisBottom(xScale);
+    var yAxis = d3.axisLeft(yScale);
+
+    // Actual svg canvas creation
+    var svg = d3.select("body")
+                .append("svg")
+                .attr("width", w + margin.left + margin.right)
+                .attr("height", h + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // Appending of bar graphs, from dataset
+    svg.selectAll("rect")
+        .data(dataset)
+        .enter()
+        .append("rect")
+        .attr("x", function(d, i) {
+            return xScale(i);
+        })
+        .attr("y", function(d) {
+            return yScale(d);
+        })
+        .attr("width", xScale.bandwidth())
+        .attr("height", function(d) {
+            return h - yScale(d);
+        })
+        .attr("fill", function(d) {
+            if (d >= 20) {
+                return "red";
+            } else if (d > 10) {
+                return "orange";
+            } else {
+                return "green";
+            }
+        });
+
+    // Appending x-axis
+    svg.append("g")
+       .attr("class", "x-axis")
+       .attr("transform", "translate(0," + h + ")")
+       .call(xAxis);
+
+    // Appending y-axis
+    svg.append("g")
+       .attr("class", "y-axis")
+       .call(yAxis);
+
+    // Remove button block
+    d3.select("#remove")
+        .on("click", function () {
+            dataset.pop();
+
+            xScale.domain(d3.range(dataset.length));
+            yScale.domain([0, d3.max(dataset)]);
+
+            var bars = svg.selectAll("rect")
+                          .data(dataset);
+
+            // Removal of bars w/ transition
+            bars.exit()
+                .transition()
+                .ease(d3.easeCubic)
+                .duration(500)
+                .attr("y", h)
+                .attr("height", 0)
+                .remove();
+
+            // Still maintain same scale as original chart w/ traffic light system
+            bars.transition()
+                .duration(500)
+                .attr("x", function(d, i) {
+                    return xScale(i);
+                })
+                .attr("y", function(d) {
+                    return yScale(d);
+                })
+                .attr("width", xScale.bandwidth())
+                .attr("height", function(d) {
+                    return h - yScale(d);
+                })
+                .attr("fill", function(d) {
+                    if (d >= 20) {
+                        return "red";
+                    } else if (d > 10) {
+                        return "orange";
+                    } else {
+                        return "green";
+                    }
+                });
+
+            // Transition of y-axis
+            svg.select(".y-axis")
+               .transition()
+               .duration(500)
+               .call(d3.axisLeft(yScale));
+
+            // Transition of x-axis
+            svg.select(".x-axis")
+               .transition()
+               .duration(500)
+               .call(d3.axisBottom(xScale));
+        });
+
+    // Add button block
+    d3.select("#add")
+        .on("click", function () {
+            var newNumber = Math.floor(Math.random() * d3.max(dataset));
+            dataset.push(newNumber);
+
+            xScale.domain(d3.range(dataset.length));
+            yScale.domain([0, d3.max(dataset)]);
+
+            var bars = svg.selectAll("rect")
+                          .data(dataset);
+
+            // Append new dataset w/ new number into our svg chart
+            bars.enter()
+                .append("rect")
+                .attr("x", w)
+                .attr("y", yScale(0)) // Start from bottom
+                .attr("width", xScale.bandwidth())
+                .attr("height", 0)
+                .attr("fill", function(d) {
+                    if (d >= 20) {
+                        return "red";
+                    } else if (d > 10) {
+                        return "orange";
+                    } else {
+                        return "green";
+                    }
+                })
+                .merge(bars)
+                .transition()
+                .ease(d3.easeCubic)
+                .duration(1000)
+                .attr("x", function(d, i) {
+                    return xScale(i);
+                })
+                .attr("y", function(d) {
+                    return yScale(d);
+                })
+                .attr("height", function(d) {
+                    return h - yScale(d);
+                })
+                .attr("width", xScale.bandwidth());
+
+            // Transition of y-axis
+            svg.select(".y-axis")
+               .transition()
+               .duration(500)
+               .call(d3.axisLeft(yScale));
+
+            // Transition of x-axis
+            svg.select(".x-axis")
+               .transition()
+               .duration(500)
+               .call(d3.axisBottom(xScale));
+        });
+</script>
+
+<br><br>
+
+<footer style="color:grey">
+    COS30045 Data Visualisation<br>
+    2025 Teaching Period 1
+</footer>
+</body>
+</html>

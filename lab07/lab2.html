@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="description"
+content="Data Visualisation"/>
+<meta name="keywords" content="HTML, CSS, D3"/>
+<meta name="author" content="Ben Tea"/>
+<title>Task 7.2 D3 Pie Chart</title>
+<script src="https://d3js.org/d3.v6.min.js"></script>
+</head> 
+<body>
+<h1 style="font-family: Cursive, Lucida Hand Writing;">Week 7 Lab 2 - D3 pie chart</h1> 
+<script>
+    // Set dimensions for pie chart w/ data points
+    var w=300;
+    var h=300;
+    var dataset =[14,5,26,23,9,6,24,21,19,4]
+    var padding = 2;
+
+    // Set the radius of the pie chart
+    var outerRadius = w / 2;
+    var innerRadius = 0;
+
+    // Create arc generator
+    var arc = d3.arc()
+        .innerRadius(innerRadius)
+        .outerRadius(outerRadius);
+
+    // Create pie layout
+    var pie = d3.pie();
+
+    // Define colour scheme
+    var colour = d3.scaleOrdinal(d3.schemeCategory10);
+
+    // Create the SVG container
+    var svg = d3.select("body")
+                .append ("svg")
+                .attr("width", w)
+                .attr("height", h);
+
+    // Create a group for each data point
+    var arcs = svg.selectAll("g.arc")
+        .data(pie(dataset))
+        .enter()
+        .append("g")
+        .attr("class", "arc")
+        .attr("transform", "translate(" + outerRadius + "," + outerRadius + ")");
+
+    // Append path for each arc
+    arcs.append("path")
+        .attr("fill", function(d, i) {
+            return colour(i);
+        })
+        .attr("d", function(d, i)   {
+            return arc(d, i);
+        });
+
+    // Append text labels for each arc
+    arcs.append("text")
+        .text(function(d) {
+            return d.value;
+        })
+        .attr("transform", function(d)  {
+            return "translate(" + arc.centroid(d) + ")";
+        })
+        .attr("text-anchor", "middle")
+        .attr("font-size", "10px")
+        .attr("font-family", "sans-serif")
+        .attr("fill", "white");
+</script>
+    
+<br>
+</br>
+
+<footer style="color:grey">
+    COS30045 Data Visualisation<br>
+    2025 Teaching Period 1
+</footer>
+</body>
+</html>

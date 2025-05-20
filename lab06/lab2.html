@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="description" content="Data Visualisation"/>
+<meta name="keywords" content="HTML, CSS, D3"/>
+<meta name="author" content="Ben Tea"/>
+<title>Task 6.2 D3 Interactivity - Sort</title>
+<script src="https://d3js.org/d3.v6.min.js"></script>
+</head> 
+<body>
+<h1 style="font-family: Cursive, Lucida Hand Writing;">Week 6 Lab 2 - Sort function</h1>
+<button id="remove" style="background-color: white; color: black; border: 2px solid #f44336; border-radius: 5px;">Remove</button>
+<button id="add" style="background-color: white; color: black; border: 2px solid #04AA6D;border-radius: 5px;">Add</button>
+<button id="sort" style="background-color: white; color: black; border: 2px solid #4169E1;border-radius: 5px;">Sort</button><br><br>
+
+<script>
+    var margin = { top: 20, right: 20, bottom: 20, left: 40 };
+    var w = 500 - margin.left - margin.right;
+    var h = 250 - margin.top - margin.bottom;
+    var dataset = [14, 5, 26, 23, 9, 6, 24, 21, 19, 4, 3, 18, 8, 30, 7];
+
+    var xScale = d3.scaleBand()
+                    .domain(d3.range(dataset.length))
+                    .rangeRound([0, w])
+                    .paddingInner(0.05);
+
+    var yScale = d3.scaleLinear()
+                    .domain([0, d3.max(dataset)])
+                    .rangeRound([h, 0]);
+
+    var xAxis = d3.axisBottom(xScale);
+    var yAxis = d3.axisLeft(yScale);
+
+    var svg = d3.select("body")
+                .append("svg")
+                .attr("width", w + margin.left + margin.right)
+                .attr("height", h + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    svg.selectAll("rect")
+        .data(dataset)
+        .enter()
+        .append("rect")
+        .attr("x", function(d, i) {
+            return xScale(i);
+        })
+        .attr("y", function(d) {
+            return yScale(d);
+        })
+        .attr("width", xScale.bandwidth())
+        .attr("height", function(d) {
+            return h - yScale(d);
+        })
+        .attr("fill", function(d) {
+            if (d >= 20) {
+                return "red";
+            } else if (d > 10) {
+                return "orange";
+            } else {
+                return "green";
+            }
+        })
+        .on("mouseover", function (event, d) {
+            var xPosition = parseFloat(d3.select(this).attr("x"))
+            var yPosition = parseFloat(d3.select(this).attr("y"))
+            var barWidth = d3.select(this).attr("width")
+            var barHeight = h - yPosition;
+
+            svg.append("text")
+                .attr("id", "tooltip")
+                .attr("x", xPosition + barWidth / 2)
+                .attr("y", yPosition + barHeight / 2)
+                .attr("text-anchor", "middle")
+                .attr("alignment-baseline", "top")
+                .attr("fill", "white")
+                .attr("font-family", "Arial")
+                .text(d);
+
+            d3.select(this)
+              .attr("fill", "slategrey");
+
+        })
+        .on("mouseout", function (event, d) {
+            d3.select(this)
+              .attr("fill", function () {
+                if (d >= 20) {
+                    return "red";
+                } else if (d > 10) {
+                    return "orange";
+                } else {
+                    return "green";
+                }
+            });
+
+            // Remove tooltip text on mouseout
+            d3.select("#tooltip").remove();
+
+            // Remove the tooltip on mouseout
+            // d3.select(".tooltip").remove();
+            });
+
+    svg.append("g")
+       .attr("class", "x-axis")
+       .attr("transform", "translate(0," + h + ")")
+       .call(xAxis);
+
+    svg.append("g")
+       .attr("class", "y-axis")
+       .call(yAxis);
+
+    // Remove button block
+    d3.select("#remove")
+        .on("click", function () {
+            dataset.pop();
+
+            xScale.domain(d3.range(dataset.length));
+            yScale.domain([0, d3.max(dataset)]);
+
+            var bars = svg.selectAll("rect")
+                          .data(dataset);
+
+            bars.exit()
+                .transition()
+                .duration(500)
+                .attr("y", h)
+                .attr("height", 0)
+                .remove();
+
+            bars.transition()
+                .duration(500)
+                .attr("x", function(d, i) {
+                    return xScale(i);
+                })
+                .attr("y", function(d) {
+                    return yScale(d);
+                })
+                .attr("width", xScale.bandwidth())
+                .attr("height", function(d) {
+                    return h - yScale(d);
+                })
+                .attr("fill", function(d) {
+                    if (d >= 20) {
+                        return "red";
+                    } else if (d > 10) {
+                        return "orange";
+                    } else {
+                        return "green";
+                    }
+                });
+
+            svg.select(".x-axis")
+                .transition()
+                .duration(500)
+                .call(xAxis);
+
+            svg.select(".y-axis")
+                .transition()
+                .duration(500)
+                .call(yAxis);
+
+            svg.selectAll("rect")
+            .on("mouseover", function (event, d) {
+                var xPosition = parseFloat(d3.select(this).attr("x"));
+                var yPosition = parseFloat(d3.select(this).attr("y"));
+                var barWidth = d3.select(this).attr("width");
+                var barHeight = h - yPosition;
+
+            d3.select(this)
+              .attr("fill", "slategrey");
+
+            svg.append("text")
+                .attr("id", "tooltip")
+                .attr("x", xPosition + barWidth / 2)
+                .attr("y", yPosition + barHeight / 2)
+                .attr("text-anchor", "middle")
+                .attr("alignment-baseline", "middle")
+                .attr("fill", "white")
+                .attr("font-family", "Arial")
+                .text(d);
+            })
+
+            // Remove tooltip text upon mouseout
+            .on("mouseout", function (event, d) {
+            d3.select(this)
+              .attr("fill", function () {
+                if (d >= 20) {
+                    return "red";
+                } else if (d > 10) {
+                    return "orange";
+                } else {
+                    return "green";
+                }
+            });
+
+            // Remove tooltip text on mouseout
+            d3.select("#tooltip").remove();
+
+            // Remove the tooltip on mouseout
+            // d3.select(".tooltip").remove();
+            });
+        });
+
+    // Add button block
+    d3.select("#add")
+        .on("click", function () {
+            var newNumber = Math.floor(Math.random() * d3.max(dataset));
+            dataset.push(newNumber);
+
+            xScale.domain(d3.range(dataset.length));
+            yScale.domain([0, d3.max(dataset)]);
+
+            var bars = svg.selectAll("rect")
+                          .data(dataset);
+
+            bars.enter()
+                .append("rect")
+                .attr("x", w)
+                .attr("y", function(d) {
+                    return yScale(d);
+                })
+                .attr("width", xScale.bandwidth())
+                .attr("height", function(d) {
+                    return h - yScale(d);
+                })
+                .attr("fill", function(d) {
+                    if (d >= 20) {
+                        return "red";
+                    } else if (d > 10) {
+                        return "orange";
+                    } else {
+                        return "green";
+                    }
+                })
+
+                .transition()
+                .duration(500)
+                .attr("x", function(d, i) {
+                    return xScale(i);
+                });
+
+            bars.transition()
+                .duration(500)
+                .attr("x", function(d, i) {
+                    return xScale(i);
+                })
+                .attr("y", function(d) {
+                    return yScale(d);
+                })
+                .attr("width", xScale.bandwidth())
+                .attr("height", function(d) {
+                    return h - yScale(d);
+                });
+
+            svg.select(".x-axis")
+                .transition()
+                .duration(500)
+                .call(xAxis);
+
+            svg.select(".y-axis")
+                .transition()
+                .duration(500)
+                .call(yAxis);
+
+            svg.selectAll("rect")
+            .on("mouseover", function (event, d) {
+                var xPosition = parseFloat(d3.select(this).attr("x"));
+                var yPosition = parseFloat(d3.select(this).attr("y"));
+                var barWidth = d3.select(this).attr("width");
+                var barHeight = h - yPosition;
+
+            d3.select(this)
+              .attr("fill", "slategrey");
+
+            svg.append("text")
+                .attr("id", "tooltip")
+                .attr("x", xPosition + barWidth / 2)
+                .attr("y", yPosition + barHeight / 2)
+                .attr("text-anchor", "middle")
+                .attr("alignment-baseline", "middle")
+                .attr("fill", "white")
+                .attr("font-family", "Arial")
+                .text(d);
+            })
+
+            // Remove grey upon mouseout
+            .on("mouseout", function (event, d) {
+            d3.select(this)
+              .attr("fill", function () {
+                if (d >= 20) {
+                    return "red";
+                } else if (d > 10) {
+                    return "orange";
+                } else {
+                    return "green";
+                }
+            });
+
+            // Remove tooltip text upon mouseout
+            d3.select("#tooltip").remove();
+            });
+        });
+
+    // Sort button; attempted new descBars function on same button, however not working - went with boolean logic approach instead
+    var ascending = true;
+
+    d3.select("#sort")
+    .on("click", function() {
+        var sortBars = function()   {
+
+            dataset.sort(function(a, b) {
+                return ascending ? d3.ascending(a, b) : d3.descending(a, b);
+            });
+
+            svg.selectAll("rect")
+                .sort(function(a, b)    {
+                    return ascending ? d3.ascending(a, b) : d3.descending(a, b);
+                })
+            .attr("x", function(d, i)   {
+                return xScale(i);
+            })
+        }
+
+        sortBars();
+        ascending = !ascending;
+
+    // .on("click", function() {
+    //     var descBars = function()   {
+
+    //         svg.selectAll("rect")
+    //             .sort(function(a, b)    {
+    //                 return d3.descending(a,b);
+    //             })
+    //         .attr("x", function(d, i)   {
+    //             return xScale(i);
+    //         })
+    //     }
+
+    //     descBars();
+    });
+</script>
+
+<br><br>
+
+<footer style="color:grey">
+    COS30045 Data Visualisation<br>
+    2025 Teaching Period 1
+</footer>
+</body>
+</html>

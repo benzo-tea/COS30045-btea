@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="description" content="Data Visualisation"/>
+    <meta name="keywords" content="HTML, CSS, D3"/>
+    <meta name="author" content="Ben Tea"/>
+    <title>Task 2.4 Loading Data from CSV</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="lab4.js"></script>
+</head> 
+<body>
+    <h1 style="font-family: Cursive, Lucida Hand Writing;">Week 2 Lab 4 - Loading Data from CSV</h1> 
+    <p id="chart"></p>
+    <script>
+        // var w = 500;
+        // var h = 150;
+        // var padding = 2;
+        // var wombatSightings;
+
+        // var svg = d3.select("body")
+        //             .append("svg")
+        //             .attr("width", w)
+        //             .attr("height", h);
+
+        // d3.csv("test.csv").then(function(data) {
+        //     console.log(data);
+        //     wombatSightings = data;
+
+        //     barChart(wombatSightings);
+        // });
+
+        // function barChart(wombatSightings) {
+        //     var barWidth = w/wombatSightings.length - padding;
+
+        //     svg.selectAll("rect")
+        //     .data (wombatSightings)
+        //     .enter()
+        //     .append ("rect")
+        //     .attr("x", function(d, i)   {
+        //         return i * (w/wombatSightings.length);
+        //     })
+        //     .attr("y", function(d)  {
+        //         return h - (d.wombats * 4);
+        //     })
+        //     .attr("width", barWidth)
+        //     .attr("height", function(d) {
+        //         return (d.wombats * 4);
+        //     })
+        //     .attr("fill", function(d)   {
+        //         // We will use a traffic light approach
+        //         if (d.wombats >= 25)    {
+        //             return "red";
+        //         }
+        //         else if (d.wombats < 25 && d.wombats > 10)  {
+        //             return "orange";
+        //         }
+        //         else    {
+        //             return "green";
+        //         }
+        //     });
+        // }
+    </script>
+    
+    <br></br>
+
+    <footer style="color:grey">
+        COS30045 Data Visualisation<br>
+        2025 Teaching Period 1
+    </footer>
+</body>
+</html>

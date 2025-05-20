@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="description"
+content="Data Visualisation"/>
+<meta name="keywords" content="HTML, CSS, D3"/>
+<meta name="author" content="Ben Tea"/>
+<title>Task 2.2 Bar Chart</title>
+<script src="https://d3js.org/d3.v6.min.js"></script>
+</head> 
+<body>
+<h1 style="font-family: Cursive, Lucida Hand Writing;">Week 2 Lab 2 - D3 Drawing with data - Bar chart</h1> 
+<script>
+    var w=500;
+    var h=150;
+    var dataset =[14,5,26,23,9,6,24,21,19,4,3,30,28,29,7];
+    var padding = 2;
+
+    var barWidth = w/dataset.length - padding;
+
+    var svg = d3.select("body")
+                .append ("svg")
+                .attr("width", w)
+                .attr("height", h);
+
+    svg.selectAll("rect")
+        .data (dataset)
+        .enter()
+        .append ("rect")
+        .attr("x", function(d, i)   {
+            return i * (w/dataset.length);
+        })
+        .attr("y", function(d)  {
+            return h - (d*4);
+        })
+        .attr("width", barWidth)
+        .attr("height", function(d) {
+            return (d * 4);
+        })
+        .attr("fill", function(d)   {
+            // We will use a traffic light approach
+            if (d >= 25)    {
+                return "red";
+            }
+            else if (d < 25 && d > 10)  {
+                return "orange";
+            }
+            else    {
+                return "green";
+            }
+        });
+</script>
+    
+<br>
+</br>
+
+<footer style="color:grey">
+    COS30045 Data Visualisation<br>
+    2025 Teaching Period 1
+</footer>
+</body>
+</html>

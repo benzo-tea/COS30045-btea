@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="description"
+content="Data Visualisation"/>
+<meta name="keywords" content="HTML, CSS, D3"/>
+<meta name="author" content="Ben Tea"/>
+<title>Task 7.3 D3 Stacked Bar Chart</title>
+<script src="https://d3js.org/d3.v6.min.js"></script>
+</head> 
+<body>
+<h1 style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">Week 7 Lab 3 - D3 stacked bar chart</h1> 
+<script>
+    // Set dimensions for stacked bar chart
+    var w = 500;
+    var h = 300;
+    var padding = 40;
+
+    // Define dataset
+    var dataset = [
+        { apples: 5, oranges: 10, grapes: 22 },
+        { apples: 4, oranges: 12, grapes: 28 },
+        { apples: 2, oranges: 19, grapes: 32 },
+        { apples: 7, oranges: 23, grapes: 35 },
+        { apples: 23, oranges: 17, grapes: 43 }
+    ];
+
+    // Define stack generator
+    var stack = d3.stack()
+        .keys(["apples", "oranges", "grapes"]);
+
+    // Generate stacked data
+    var series = stack(dataset);
+
+    // Define colour scheme
+    var colour = d3.scaleOrdinal(d3.schemeCategory10);
+
+    // Create xScale and yScale
+    var xScale = d3.scaleBand()
+        .domain(d3.range(dataset.length))
+        .range([padding, w - padding])
+        .padding(0.1);
+
+    var yScale = d3.scaleLinear()
+        .domain([0, d3.max(series, d => d3.max(d, d => d[1]))])
+        .range([h - padding, padding]);
+
+    // Create the SVG container
+    var svg = d3.select("body")
+        .append("svg")
+        .attr("width", w)
+        .attr("height", h);
+
+    // Create groups for each series
+    var groups = svg.selectAll("g")
+        .data(series)
+        .enter()
+        .append("g")
+        .attr("fill", (d, i) => colour(i));
+
+    // Draw the rectangles
+    groups.selectAll("rect")
+        .data(d => d)
+        .enter()
+        .append("rect")
+        .attr("x", (d, i) => xScale(i))
+        .attr("y", d => yScale(d[1]))
+        .attr("height", d => yScale(d[0]) - yScale(d[1]))
+        .attr("width", xScale.bandwidth());
+
+    // Add axes
+    var xAxis = d3.axisBottom(xScale)
+        .tickFormat((d, i) => `Group ${i + 1}`);
+
+    var yAxis = d3.axisLeft(yScale);
+
+    // Append x-axis
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", `translate(0,${h - padding})`)
+        .call(xAxis);
+
+    // Append y-axis
+    svg.append("g")
+        .attr("class", "y axis")
+        .attr("transform", `translate(${padding},0)`)
+        .call(yAxis);
+</script>
+<br>
+</br>
+
+<footer style="color:grey">
+    COS30045 Data Visualisation<br>
+    2025 Teaching Period 1
+</footer>
+</body>
+</html>

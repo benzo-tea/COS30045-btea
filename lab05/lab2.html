@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="description"
+content="Data Visualisation"/>
+<meta name="keywords" content="HTML, CSS, D3"/>
+<meta name="author" content="Ben Tea"/>
+<title>Task 5.2 D3 Transitions</title>
+<script src="https://d3js.org/d3.v6.min.js"></script>
+</head> 
+<body>
+<h1 style="font-family: Cursive, Lucida Hand Writing;">Week 5 Lab 2 - D3 Transitions</h1>
+<button id="CircleIn" style="background-color: white; color: black; border: 2px solid #04AA6D; border-radius: 5px;">Circle In</button>
+<button id="ElasticOut" style="background-color: white; color: black; border: 2px solid #008CBA; border-radius: 5px;">Elastic Out</button>
+<button id="CircleOut" style="background-color: white; color: black; border: 2px solid #f44336; border-radius: 5px;">Circle Out</button><br><br>
+<script>
+    var margin = { top: 20, right: 20, bottom: 40, left: 40 };
+    var w = 500 - margin.left - margin.right;
+    var h = 250 - margin.top - margin.bottom;
+    var dataset =[14,5,26,23,9,6,24,21,19,4,3,30,28,29,7];
+    // var newDataset = [24, 10, 29, 19, 8, 15, 20, 12, 9, 6, 21, 28];
+
+    // Ordinal data, so scaleBand is fine here
+    var xScale = d3.scaleBand()
+                    .domain(d3.range(dataset.length))
+                    .rangeRound([0,w])
+                    .paddingInner(0.05);
+
+    // Quantitative data, so scaleLinear is appropriate here
+    var yScale = d3.scaleLinear()
+                    .domain([0, d3.max(dataset)])
+                    .rangeRound([h, 0]);
+
+    // Adding our axes
+    var xAxis = d3.axisBottom(xScale);
+
+    var yAxis = d3.axisLeft(yScale);
+
+    var svg = d3.select("body")
+                .append ("svg")
+                .attr("width", w + margin.left + margin.right)
+                .attr("height", h + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    svg.selectAll("rect")
+        .data (dataset)
+        .enter()
+        .append ("rect")
+        .attr("x", function(d, i)   {
+            return xScale(i);
+        })
+        .attr("y", function(d)  {
+            return yScale(d);
+        })
+        .attr("width", xScale.bandwidth())
+        .attr("height", function(d) {
+            return h - yScale(d);
+        })
+        .attr("fill", function(d)   {
+            // We will use a traffic light approach
+            if (d >= 25)    {
+                return "red";
+            }
+            else if (d < 25 && d > 10)  {
+                return "orange";
+            }
+            else    {
+                return "green";
+            }
+        });
+
+    svg.append("g")
+       .attr("class", "x-axis")
+       .attr("transform", "translate(0," + h + ")")
+       .call(xAxis);
+
+    svg.append("g")
+       .attr("class", "y-axis")
+       .call(yAxis);
+
+    function updateChart(easeType) {
+        var numValues = dataset.length;
+        var maxValue = 30;
+        var randomDataset = [];
+
+        for (var i = 0; i < numValues; i++) {
+            var newNumber = Math.floor(Math.random() * maxValue);
+            randomDataset.push(newNumber);
+        }
+
+    yScale.domain([0, d3.max(randomDataset)]);
+
+    // Choose easing function
+    var ease;
+    switch (easeType) {
+        case "circleIn": ease = d3.easeCircleIn; break;
+        case "elasticOut": ease = d3.easeElasticOut; break;
+        case "circleOut": ease = d3.easeCircleOut; break;
+        default: ease = d3.easeCubic;
+    }
+
+    svg.select(".y-axis")
+        .transition()
+        .duration(1000)
+        .call(d3.axisLeft(yScale));
+
+    svg.select(".x-axis")
+        .transition()
+        .duration(1000)
+        .call(d3.axisBottom(xScale));
+
+    svg.selectAll("rect")
+        .data(randomDataset)
+        .transition()
+        .duration(2000)
+        .ease(ease)
+        .attr("y", function(d) {
+            return yScale(d);
+        })
+        .attr("height", function(d) {
+            return h - yScale(d);
+        })
+        .attr("fill", function(d) {
+            if (d >= maxValue / 3 * 2) {
+                return "red";
+            } else if (d > maxValue / 3) {
+                return "orange";
+            } else {
+                return "green";
+            }
+        });
+
+    dataset = randomDataset;
+}
+
+
+d3.select("#CircleIn").on("click", function () { updateChart("circleIn"); });
+d3.select("#ElasticOut").on("click", function () { updateChart("elasticOut"); });
+d3.select("#CircleOut").on("click", function () { updateChart("circleOut"); });
+
+
+
+</script>
+    
+<br>
+</br>
+
+<footer style="color:grey">
+    COS30045 Data Visualisation<br>
+    2025 Teaching Period 1
+</footer>
+</body>
+</html>
