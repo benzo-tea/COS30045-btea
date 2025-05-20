@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Health Perception by Education Level</title>
+
+  <!-- Link to external stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- D3.js library -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+
+  <!-- Save SVG as PNG library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/save-svg-as-png/1.4.17/saveSvgAsPng.min.js"></script>
+</head>
+<body>
+
+  <!-- Page Title -->
+  <h2 class="page-title">How Education Level Shapes Perceived Health</h2>
+
+  <!-- Filters and Controls -->
+  <div class="controls">
+    <label for="continentSelect">Continent:</label>
+    <select id="continentSelect">
+      <option value="All">All</option>
+    </select>
+
+    <label for="sexSelect">Sex:</label>
+    <select id="sexSelect">
+      <option value="All">All</option>
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+    </select>
+
+    <label for="incomeSelect">Education Level:</label>
+    <select id="incomeSelect">
+      <option value="All">All</option>
+    </select>
+
+    <label for="chartTypeSelect">Chart Type:</label>
+    <select id="chartTypeSelect">
+      <option value="grouped">Grouped Bar Chart</option>
+      <option value="dot">Dot Plot</option>
+      <option value="heatmap">Heatmap</option>
+    </select>
+
+    <!-- Buttons for Reset and Download -->
+    <button id="resetButton">Reset Filters</button>
+    <button id="downloadButton">Download Chart as PNG</button>
+  </div>
+
+  <!-- Loading Message -->
+  <div id="loading">Loading chart, please wait...</div>
+
+  <!-- Main SVG where the chart will be drawn -->
+  <svg id="chart" width="1400" height="600"></svg>
+
+  <!-- Legend Section -->
+  <div class="legend" id="legend"></div>
+
+  <!-- Link to custom JavaScript file -->
+  <script src="script/script.js"></script>
+</body>
+</html>

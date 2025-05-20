@@ -1,0 +1,97 @@
+/* Base body styles */
+body {
+  font-family: sans-serif;
+}
+
+/* Chart bars */
+.bar {
+  opacity: 0.8;
+  transition: opacity 0.3s;
+}
+.bar:hover {
+  opacity: 1;
+}
+
+/* Axis labels */
+.axis-label {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* Tooltip styles */
+.tooltip {
+  position: absolute;
+  padding: 6px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0px 2px 8px rgba(0,0,0,0.2);
+  font-size: 12px;
+  pointer-events: none;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+/* Controls section (dropdowns and buttons) */
+.controls {
+  margin-bottom: 20px;
+}
+
+/* Dropdown (select) styling */
+select {
+  margin-right: 10px;
+  padding: 5px;
+}
+
+/* Buttons styling */
+button {
+  margin: 5px;
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: #4E79A7;
+  color: white;
+  border: none;
+  border-radius: 4px;
+}
+button:hover {
+  background-color: #3a5f8c;
+}
+
+/* Legend area */
+.legend {
+  margin-top: 20px;
+}
+.legend-item {
+  display: inline-block;
+  margin-right: 20px;
+  font-size: 14px;
+}
+.legend-color {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+/* Loading message */
+#loading {
+  font-size: 18px;
+  text-align: center;
+  margin: 20px;
+}
+
+/* Hidden class (for hiding elements like loading spinner) */
+.hidden {
+  display: none;
+}
+
+/* Main page title */
+.page-title {
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 28px;
+  font-weight: bold;
+}
